@@ -1,0 +1,80 @@
+[build-system]
+requires = ["hatchling"]
+build-backend = "hatchling.build"
+
+[tool.hatch.version]
+path = "src/embdgen/plugins/content/CominitContent.py"
+
+[tool.hatch.metadata]
+allow-direct-references = true
+
+[tool.hatch.build.targets.wheel]
+packages = ["src/embdgen"]
+
+[project]
+name = "embdgen-cominit"
+dynamic = ["version"]
+
+authors = [
+  { name="AOX GmbH", email="info@aox.de" },
+  { name="Elektrobit GmbH", email="info@elektrobit.com" },
+]
+description = "Cominit content plugin for the EMBedded Disk GENerator (embdgen)"
+readme = "README.md"
+classifiers = [
+    "Programming Language :: Python :: 3",
+    "License :: OSI Approved :: MIT License",
+    "Operating System :: POSIX :: Linux",
+]
+requires-python = ">=3.8"
+dependencies = [
+    "embdgen-core",
+    "cryptography"
+]
+
+[project.urls]
+Homepage = "https://to.be.defined"
+
+
+
+[tool.pylint.format]
+max-line-length = 120
+
+[tool.pylint.'MESSAGES CONTROL']
+disable = [
+    'missing-module-docstring',
+    'missing-function-docstring',
+    'missing-class-docstring',
+    'invalid-name',
+    'broad-exception-raised',
+    'too-few-public-methods',
+    'too-many-instance-attributes',
+    'fixme'
+]
+
+[tool.pytest.ini_options]
+minversion = "7.4"
+addopts = "--cov --cov-context=test --cov-report html -rP"
+testpaths = [ "tests" ]
+#tmp_path_retention_policy = "none"
+
+[tool.coverage.paths]
+source = [
+    "src/embdgen",
+    "*/site-packages/embdgen"
+]
+
+[tool.coverage.run]
+branch = true
+source = ["embdgen", "src"]
+
+[tool.coverage.report]
+include_namespace_packages = true
+exclude_also = [
+    "@(abc\\.)?abstractmethod",
+    "def __repr__"
+]
+include = ["src/*"]
+
+[tool.coverage.html]
+show_contexts = true

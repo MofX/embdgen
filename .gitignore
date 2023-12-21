@@ -1,0 +1,12 @@
+.vscode/
+/tmp/
+/files/
+/out/
+/.venv/
+/docs/_build/
+
+htmlcov/
+__pycache__/
+dist/
+.coverage
+.pytest_cache/

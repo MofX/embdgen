@@ -1,0 +1,39 @@
+# Simple example
+# This creates an MBR partition layout with a single partition,
+# that is recorded in the partition table (boot)
+#
+# It also writes the NXP S32 series bootloader (fip.s32) to the correct locations
+# around the partition table and reserves space for the u-boot environment
+
+type: mbr
+boot_partition: boot
+
+parts:
+  - name: u-boot part 1
+    type: raw
+    start: 0
+    size:  256 B
+    content:
+      type:  raw
+      file:  files/fip.s32
+
+  - name: u-boot part 2
+    type: raw
+    start:  512 B
+    content:
+      type:   raw
+      file:   files/fip.s32
+      offset: 512 B
+
+  - name: uboot.env
+    type:  empty
+    start: 0x1e0000 B
+    size:  0x2000 B
+
+  - name: boot
+    type: fat32
+    content:
+      type: files
+      files:
+        - files/fitimage
+    size: 100 MB

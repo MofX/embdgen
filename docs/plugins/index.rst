@@ -1,0 +1,8 @@
+Plugins
+=======
+
+
+.. toctree::
+    :glob:
+
+    */index

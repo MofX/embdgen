@@ -1,0 +1,19 @@
+# Cominit plain sample
+# This creates a partition with cominit metadata for a raw ext4 partition.
+# The partition will be mounted readwrite (readonly: false), when cominit reads
+# the cominit metadata
+
+type: mbr
+
+parts:
+  - name: root
+    type: ext4
+    content:
+      type:       cominit
+      key:        files/private-key.pem
+      dm_type:    plain
+      readonly:   false
+      filesystem: ext4
+      content:
+        type: raw
+        file: files/root.raw

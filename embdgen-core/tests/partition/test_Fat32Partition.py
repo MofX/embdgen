@@ -1,0 +1,51 @@
+from pathlib import Path
+import subprocess
+
+import pytest
+
+from embdgen.plugins.partition.Fat32Partition import Fat32Partition
+from embdgen.plugins.content.FilesContent import FilesContent
+from embdgen.core.utils.image import get_temp_path
+from embdgen.core.utils.SizeType import SizeType
+
+class TestFat32Partition:
+    def test_files(self, tmp_path: Path):
+        """
+        Fat32 only supports files content right now
+        """
+        get_temp_path.TEMP_PATH = tmp_path
+        image = tmp_path / "image"
+
+        test_files = []
+        for i in range(5):
+            filename = tmp_path / f"test_file.{i}"
+            filename.write_text(f"Test file #{i}")
+            test_files.append(filename)
+
+        obj = Fat32Partition()
+        obj.name = "fat32_test"
+        obj.content = FilesContent()
+        obj.content.files = test_files
+
+
+        with pytest.raises(Exception, match="Fat32 partitions require a fixed size at the moment"):
+            obj.prepare()
+        assert obj.size.is_undefined
+
+        obj.size = SizeType.parse("10MB")
+        obj.prepare()
+        assert obj.start.is_undefined
+
+        obj.start = SizeType(0)
+        
+        with image.open("wb") as out_file:
+            obj.write(out_file)
+        assert image.stat().st_size == SizeType.parse("10MB").bytes
+
+        res = subprocess.run([
+            "mdir",
+            "-i", image,
+            "-b"
+        ], stdout=subprocess.PIPE, check=True, encoding="ascii")
+
+        assert sorted(map(lambda x: x[3:], res.stdout.splitlines())) == sorted(map(lambda x: x.name, test_files))

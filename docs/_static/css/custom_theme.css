@@ -1,0 +1,9 @@
+.wy-nav-content {
+    max-width: 1200px;
+}
+
+
+/* See: https://github.com/readthedocs/sphinx_rtd_theme/issues/1301 */
+dl.py.property {
+    display: block !important;
+}
