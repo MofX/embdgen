@@ -1,3 +1,27 @@
+# Requirements
+
+Emdgen needs the following packages on ubuntu/debian:
+
+## Required
+
+ - `python3`
+ - `python3-pip`
+ - `python3-venv`
+ - `libparted-dev`: Used by pyparted, to edit partition tables
+
+```
+apt install python3 python3-pip python3-venv libparted-dev
+```
+
+## Optional (required for test execution during development)
+ - `mtools`:         For copying files to fat32 partitions
+ - `e2fsprogs`:      For everything ext(1,2,3,4) related
+ - `cryptsetup-bin`: For veritysetup, when not using the internal hash calculation algorithm
+
+```
+apt install mtools e2fsprogs cryptsetup-bin
+```
+
 # Development
 It is highly recommended, to develop in a virtual environment using python 3.10:
 
