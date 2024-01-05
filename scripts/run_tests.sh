@@ -8,7 +8,7 @@ for d in embdgen-*; do
         echo "Testing $d"
         (
             cd $d
-            hatch run pytest tests
+            pytest tests
         )
     fi
 done
