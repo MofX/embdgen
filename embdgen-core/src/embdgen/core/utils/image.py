@@ -4,8 +4,8 @@ Utility functions for working with images
 import io
 import os
 from pathlib import Path
-from fallocate import fallocate, FALLOC_FL_PUNCH_HOLE, FALLOC_FL_KEEP_SIZE
 import tempfile
+from fallocate import fallocate, FALLOC_FL_PUNCH_HOLE, FALLOC_FL_KEEP_SIZE
 
 def create_empty_image(filename: str, size: int):
     """

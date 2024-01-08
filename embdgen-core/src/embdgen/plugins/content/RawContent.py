@@ -1,4 +1,4 @@
-from io import BufferedIOBase, BufferedReader
+from io import BufferedIOBase
 from pathlib import Path
 
 from embdgen.core.utils.class_factory import Config
