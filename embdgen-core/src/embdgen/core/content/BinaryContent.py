@@ -18,8 +18,7 @@ class BinaryContent(BaseContent):
     def result_file(self) -> Path:
         if not self._result_file:
             self._result_file = get_temp_file(ext=f".{self.__class__.__name__}")
-            with self._result_file.open("wb") as f:
-                self.do_write(f)
+            self._prepare_result()
         return self._result_file
 
     def write(self, file: io.BufferedIOBase):
@@ -28,6 +27,10 @@ class BinaryContent(BaseContent):
                 copy_sparse(file, in_file)
         else:
             self.do_write(file)
+
+    def _prepare_result(self):
+        with self._result_file.open("wb") as f:
+            self.do_write(f)
 
     @abc.abstractmethod
     def do_write(self, file: io.BufferedIOBase):
