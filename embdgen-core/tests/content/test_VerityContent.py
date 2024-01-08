@@ -40,7 +40,6 @@ class TestVerityContent():
         get_temp_path.TEMP_PATH = tmp_path
         metadata_file = tmp_path / "metadata.txt"
         input_file = tmp_path / "input"
-        verity_file = tmp_path / "input.hash"
         image_file = tmp_path / "image"
 
         create_empty_image(input_file, size)
@@ -70,6 +69,8 @@ class TestVerityContent():
 
         if expected_root_hash:
             assert [line.split(":") for line in  metadata_file.read_text().splitlines() if line.startswith("Root hash")][0][1].strip() == expected_root_hash
+
+        verity_file = obj.hash_file
 
         # 129 Blocks of data are condensed into three block of metadata (2 for level 1 and 1 for level 0)
         assert verity_file.exists() and verity_file.stat().st_size == expected_hashtable_size

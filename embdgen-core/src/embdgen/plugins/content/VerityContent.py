@@ -1,7 +1,6 @@
 import subprocess
 import io
 from io import BufferedIOBase
-import os
 import math
 import random
 from pathlib import Path
@@ -10,8 +9,7 @@ import hashlib
 
 from embdgen.core.utils.class_factory import Config
 from embdgen.core.content.BinaryContent import BinaryContent
-from embdgen.plugins.content.RawContent import RawContent
-from embdgen.core.utils.image import copy_sparse, get_temp_path
+from embdgen.core.utils.image import copy_sparse, get_temp_file
 from embdgen.core.utils.SizeType import SizeType
 
 @Config('content')
@@ -33,7 +31,7 @@ class VerityContent(BinaryContent):
     """
     CONTENT_TYPE = "verity"
 
-    content: RawContent = None
+    content: BinaryContent = None
     """The payload content of the partition"""
     metadata: Path = None
     """A path to a file, where the metadata is written to.
@@ -56,10 +54,13 @@ class VerityContent(BinaryContent):
     """
 
     __padding: int = 0
+    __hash_file: Path = None
 
     @property
     def hash_file(self):
-        return get_temp_path() / (os.path.basename(self.content.file) + ".hash")
+        if not self.__hash_file:
+            self.__hash_file = get_temp_file(ext=".hash")
+        return self.__hash_file
 
     def _do_verity(self) -> None:
         verity_params = [
@@ -79,7 +80,7 @@ class VerityContent(BinaryContent):
                 "veritysetup",
                 "format",
                 *verity_params,
-                self.content.file,
+                self.content.result_file,
                 self.hash_file
             ], stdout=f, stderr=f, check=True)
 
@@ -127,7 +128,7 @@ class VerityContent(BinaryContent):
             out_file.truncate((level_start_block[0] + block_counts[0]) * hash_blocksize)
             # Start with data blocks:
             out_file.seek(level_start_block[cur_level] * hash_blocksize)
-            with open(self.content.file, "rb") as in_file:
+            with self.content.result_file.open("rb") as in_file:
                 for _ in range(num_data_blocks):
                     lhasher = hasher.copy()
                     lhasher.update(in_file.read(data_blocksize))
