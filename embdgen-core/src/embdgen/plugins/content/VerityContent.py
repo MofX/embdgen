@@ -179,7 +179,7 @@ Root hash:              {root_hash}
         self.size.bytes += self.__padding
 
 
-    def write(self, file: BufferedIOBase):
+    def do_write(self, file: BufferedIOBase):
         self.content.write(file)
         file.seek(self.__padding, io.SEEK_CUR)
         with open(self.hash_file, "rb") as in_file:

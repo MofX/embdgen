@@ -143,7 +143,7 @@ class CominitContent(BinaryContent):
 
         return data
 
-    def write(self, file: BufferedIOBase):
+    def do_write(self, file: BufferedIOBase):
         self.content.write(file)
         file.write(self._create_metadata())
 

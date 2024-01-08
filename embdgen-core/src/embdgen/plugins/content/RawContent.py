@@ -1,4 +1,4 @@
-from io import BufferedIOBase
+from io import BufferedIOBase, BufferedReader
 from pathlib import Path
 
 from embdgen.core.utils.class_factory import Config
@@ -60,8 +60,7 @@ class RawContent(BinaryContent):
         if self.size.is_undefined:
             self.size = SizeType(file_size_available)
 
-
-    def write(self, file: BufferedIOBase):
+    def do_write(self, file: BufferedIOBase):
         with open(self.file, "rb") as in_file:
             in_file.seek(self.offset.bytes)
             copy_sparse(file, in_file, self.size.bytes)
