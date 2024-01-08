@@ -118,7 +118,7 @@ class CominitContent(BinaryContent):
         return private_key.sign(data,
             padding.PSS(
                 mgf=padding.MGF1(hashes.SHA256()),
-                salt_length=padding.PSS.DIGEST_LENGTH
+                salt_length=hashes.SHA256.digest_size
             ),
             hashes.SHA256()
         )

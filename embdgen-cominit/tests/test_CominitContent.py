@@ -7,7 +7,6 @@ from embdgen.core.utils.image import get_temp_path
 from embdgen.core.utils.SizeType import SizeType
 from embdgen.plugins.content.CominitContent import CominitContent
 from embdgen.plugins.content.RawContent import RawContent
-from embdgen.plugins.content.RawContent import RawContent
 from embdgen.plugins.content.VerityContent import VerityContent
 
 
@@ -21,7 +20,7 @@ def verify_signature(metadata: bytes, sig: bytes):
     public_key.verify(sig[:512], metadata + b"\0",  
         padding.PSS(
             mgf=padding.MGF1(hashes.SHA256()),
-            salt_length=padding.PSS.DIGEST_LENGTH
+            salt_length=hashes.SHA256.digest_size
         ),
         hashes.SHA256()
     )
