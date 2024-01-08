@@ -19,7 +19,6 @@ class YAML(BaseConfig):
                 return not isinstance(res.value, (str, int))
         except (UnicodeDecodeError, y.YAMLError):
             return False
-        return True
 
     def load(self, filename: Path) -> BaseLabel:
         with filename.open(encoding="utf-8") as f:
