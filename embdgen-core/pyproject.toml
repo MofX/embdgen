@@ -51,7 +51,7 @@ disable = [
 ]
 
 [tool.pytest.ini_options]
-minversion = "7.4"
+minversion = "6.2.5"
 addopts = "--cov --cov-context=test --cov-report html -rP"
 testpaths = [ "tests" ]
 #tmp_path_retention_policy = "none"
