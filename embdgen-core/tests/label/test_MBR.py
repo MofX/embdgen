@@ -9,12 +9,12 @@ from embdgen.core.utils.SizeType import SizeType
 
 from embdgen.plugins.label.MBR import MBR
 from embdgen.plugins.partition.EmptyPartition import EmptyPartition
-from embdgen.plugins.partition.Ext4Partition import Ext4Partition
-from embdgen.plugins.partition.Fat32Partition import Fat32Partition
+from embdgen.plugins.partition.PartitionPartition import PartitionPartition
 from embdgen.plugins.partition.RawPartition import RawPartition
 
 from embdgen.plugins.content.RawContent import RawContent
 from embdgen.plugins.content.FilesContent import FilesContent
+from embdgen.plugins.content.Fat32Content import Fat32Content
 
 @dataclass
 class FdiskPartition:
@@ -79,7 +79,7 @@ class FdiskParser:
                 elif line.startswith("Device"):
                     in_partitions = True
 
-            
+
 
 
 class TestMBR:
@@ -127,14 +127,17 @@ class TestMBR:
 
         ext4_raw = tmp_path / "ext4"
         ext4_raw.write_bytes(b"1" * 512 * 2)
-        ext4 = Ext4Partition()
+        ext4 = PartitionPartition()
+        ext4.fstype = "ext4"
         ext4.name = "ext4 partition"
         ext4.content = RawContent()
         ext4.content.file = ext4_raw
-        
-        fat32 = Fat32Partition()
+
+        fat32 = PartitionPartition()
+        fat32.fstype = "fat32"
         fat32.name = "fat32 partition"
-        fat32.content = FilesContent()
+        fat32.content = Fat32Content()
+        fat32.content.content = FilesContent()
         fat32.size = SizeType.parse("5MB")
 
         obj.parts = [
