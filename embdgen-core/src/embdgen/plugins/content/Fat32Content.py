@@ -2,19 +2,19 @@ import io
 import subprocess
 
 from embdgen.core.utils.class_factory import Config
-from embdgen.core.partition.BaseContentPartition import BaseContentPartition
+from embdgen.core.content.BinaryContent import BinaryContent
 from embdgen.plugins.content.FilesContent import FilesContent
-from embdgen.core.utils.image import create_empty_image, copy_sparse, get_temp_path
+from embdgen.core.utils.image import create_empty_image, copy_sparse
 
-@Config('content')
-class Fat32Partition(BaseContentPartition):
-    """Fat32 partition
-    
+@Config("content")
+class Fat32Content(BinaryContent):
+    """Fat32 Content
+
     Currently this can only be created using a FilesContent,
     that contains a list of files, that are copied to the root
     of a newly created fat32 filesystem.
     """
-    PART_TYPE = 'fat32'
+    CONTENT_TYPE = "fat32"
 
     content: FilesContent
     """Content of this partition"""
@@ -24,22 +24,24 @@ class Fat32Partition(BaseContentPartition):
         if self.size.is_undefined:
             raise Exception("Fat32 partitions require a fixed size at the moment")
 
-    def write(self, out_file: io.BufferedIOBase):
-        tmp_name = get_temp_path() / (self.name + ".tmp")
-        create_empty_image(tmp_name, self.size.bytes)
+
+    def _prepare_result(self):
+        create_empty_image(self.result_file, self.size.bytes)
+
         subprocess.run([
                 "mkfs.vfat",
-                tmp_name
+                self.result_file
             ],
             check=True,
             stdout=subprocess.PIPE,
             stderr=subprocess.STDOUT
         )
+
         for file in self.content.files:
             subprocess.run(
                 [
                     "mcopy",
-                    "-i", tmp_name,
+                    "-i", self.result_file,
                     file, "::"
                 ],
                 check=True,
@@ -47,6 +49,11 @@ class Fat32Partition(BaseContentPartition):
                 stderr=subprocess.STDOUT
             )
 
-        out_file.seek(self.start.bytes)
-        with open(tmp_name, "rb") as in_file:
-            copy_sparse(out_file, in_file, self.size.bytes)
+
+    def do_write(self, file: io.BufferedIOBase):
+        with open(self.result_file, "rb") as in_file:
+            copy_sparse(file, in_file, self.size.bytes)
+
+
+    def __repr__(self) -> str:
+        return f"{self.__class__.__name__}({', '.join(map(str, self.content.files))})"

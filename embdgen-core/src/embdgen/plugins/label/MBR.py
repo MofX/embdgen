@@ -75,7 +75,7 @@ class MBR(BaseLabel):
                 disk=disk,
                 type=parted.PARTITION_NORMAL,
                 geometry=geometry,
-                fs=parted.FileSystem(part.PART_TYPE, geometry=geometry)
+                fs=parted.FileSystem(part.fstype, geometry=geometry)
             )
             partition.setFlag(parted.PARTITION_LBA)
             disk.addPartition(partition=partition, constraint=parted.Constraint(exactGeom=geometry))

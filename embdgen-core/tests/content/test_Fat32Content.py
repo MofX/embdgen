@@ -3,12 +3,12 @@ import subprocess
 
 import pytest
 
-from embdgen.plugins.partition.Fat32Partition import Fat32Partition
 from embdgen.plugins.content.FilesContent import FilesContent
+from embdgen.plugins.content.Fat32Content import Fat32Content
 from embdgen.core.utils.image import get_temp_path
 from embdgen.core.utils.SizeType import SizeType
 
-class TestFat32Partition:
+class TestFat32Content:
     def test_files(self, tmp_path: Path):
         """
         Fat32 only supports files content right now
@@ -22,11 +22,9 @@ class TestFat32Partition:
             filename.write_text(f"Test file #{i}")
             test_files.append(filename)
 
-        obj = Fat32Partition()
-        obj.name = "fat32_test"
+        obj = Fat32Content()
         obj.content = FilesContent()
         obj.content.files = test_files
-
 
         with pytest.raises(Exception, match="Fat32 partitions require a fixed size at the moment"):
             obj.prepare()
@@ -34,10 +32,7 @@ class TestFat32Partition:
 
         obj.size = SizeType.parse("10MB")
         obj.prepare()
-        assert obj.start.is_undefined
 
-        obj.start = SizeType(0)
-        
         with image.open("wb") as out_file:
             obj.write(out_file)
         assert image.stat().st_size == SizeType.parse("10MB").bytes
