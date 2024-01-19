@@ -10,7 +10,7 @@ from embdgen.core.utils.image import copy_sparse
 @Config("offset", optional=True)
 class RawContent(BinaryContent):
     """Raw binary content
-    
+
     It is up to the including content module, to decide what happens with the files.
     """
     CONTENT_TYPE = "raw"
@@ -40,10 +40,10 @@ class RawContent(BinaryContent):
     @property
     def offset(self) -> SizeType:
         """Offset into the input file.
-        
+
         This can be used, if the file has a header, that should be skipped.
-        
-        In combination with RawPartition's size attribute, this can also be used,
+
+        In combination with RawRegion's size attribute, this can also be used,
         to copy a specific part of a fle to the resulting image.
         """
         return self._offset

@@ -2,17 +2,17 @@ from io import BytesIO
 from pathlib import Path
 
 from embdgen.core.utils.SizeType import SizeType
-from embdgen.plugins.partition.PartitionPartition import PartitionPartition
+from embdgen.plugins.region.PartitionRegion import PartitionRegion
 from embdgen.plugins.content.RawContent import RawContent
 
-class TestPartitionPartition:
+class TestPartitionRegion:
     def test_raw(self, tmp_path: Path):
         """
-        At the moment Ext4Partition can not create ext4 partitions, it only reuses existing ext4 images
+        At the moment PartitionRegion can not create ext4 regions, it only reuses existing ext4 images
         """
         input = tmp_path / "input"
         input.write_bytes(b"".join([i.to_bytes(1, 'little') for i in range(256)]))
-        obj = PartitionPartition()
+        obj = PartitionRegion()
         obj.content = RawContent()
         obj.content.file = input
         obj.fstype = "ext4"

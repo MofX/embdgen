@@ -1,4 +1,4 @@
-from  embdgen.core.partition import Factory
+from  embdgen.core.region import Factory
 
 def test_factory():
     f_types = Factory().types()

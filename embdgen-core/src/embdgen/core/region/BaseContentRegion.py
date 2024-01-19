@@ -1,11 +1,11 @@
 import abc
-from . import BasePartition
+from . import BaseRegion
 from ..content import BaseContent
 
 from ..utils.class_factory import Config
 
 @Config('content')
-class BaseContentPartition(BasePartition, abc.ABC):
+class BaseContentRegion(BaseRegion, abc.ABC):
     content: BaseContent = None
 
     def prepare(self) -> None:

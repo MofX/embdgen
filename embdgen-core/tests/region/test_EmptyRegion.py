@@ -1,9 +1,9 @@
 from io import BytesIO
-from embdgen.plugins.partition.EmptyPartition import EmptyPartition
+from embdgen.plugins.region.EmptyRegion import EmptyRegion
 
-class TestEmptyPartition:
+class TestEmptyRegion:
     def test_simple(self):
-        obj = EmptyPartition()
+        obj = EmptyRegion()
         obj.prepare()
         assert obj.size.is_undefined
         assert obj.start.is_undefined
