@@ -1,4 +1,4 @@
-embdgen.plugins.partition
+embdgen.plugins.region
 =========================
 
 .. toctree::

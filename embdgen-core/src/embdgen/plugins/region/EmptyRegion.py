@@ -1,7 +1,7 @@
-from embdgen.core.partition.BasePartition import BasePartition
+from embdgen.core.region.BaseRegion import BaseRegion
 
-class EmptyPartition(BasePartition):
-    """A partition without any data
+class EmptyRegion(BaseRegion):
+    """A region without any data
 
     This can be used to reserve a range (e.g. for the uboot environment)
     This does not generate an entry in the partition table.
@@ -13,4 +13,4 @@ class EmptyPartition(BasePartition):
         self.is_partition = False
 
     def write(self, out_file):
-        pass # Nothing to do for empty partition
+        pass # Nothing to do for empty region

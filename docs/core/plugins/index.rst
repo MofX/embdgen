@@ -5,5 +5,5 @@ Core Plugins
     :glob:
 
     label/index
-    partition/index
+    region/index
     content/index

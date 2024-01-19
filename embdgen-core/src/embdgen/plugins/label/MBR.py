@@ -4,12 +4,12 @@ from pathlib import Path
 import parted
 
 from embdgen.core.utils.class_factory import Config
-from embdgen.core.partition.BasePartition import BasePartition
+from embdgen.core.region.BaseRegion import BaseRegion
 from embdgen.core.utils.SizeType import SizeType
 from embdgen.core.utils.image import create_empty_image
 from embdgen.core.label.BaseLabel import BaseLabel
 
-class MBRHeader(BasePartition):
+class MBRHeader(BaseRegion):
     diskid: int = None
 
     def __init__(self) -> None:

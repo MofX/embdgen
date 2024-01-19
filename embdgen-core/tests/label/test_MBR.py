@@ -8,16 +8,16 @@ from embdgen.core.utils.image import get_temp_path
 from embdgen.core.utils.SizeType import SizeType
 
 from embdgen.plugins.label.MBR import MBR
-from embdgen.plugins.partition.EmptyPartition import EmptyPartition
-from embdgen.plugins.partition.PartitionPartition import PartitionPartition
-from embdgen.plugins.partition.RawPartition import RawPartition
+from embdgen.plugins.region.EmptyRegion import EmptyRegion
+from embdgen.plugins.region.PartitionRegion import PartitionRegion
+from embdgen.plugins.region.RawRegion import RawRegion
 
 from embdgen.plugins.content.RawContent import RawContent
 from embdgen.plugins.content.FilesContent import FilesContent
 from embdgen.plugins.content.Fat32Content import Fat32Content
 
 @dataclass
-class FdiskPartition:
+class FdiskRegion:
     start_sector: int
     end_sector: int
     sectors: int
@@ -31,10 +31,10 @@ class FdiskParser:
 
     is_valid: bool = False
     diskid: int = None
-    partitions: List[FdiskPartition]
+    regions: List[FdiskRegion]
 
     def __init__(self, image):
-        self.partitions = []
+        self.regions = []
         ret = subprocess.run([
             'fdisk',
             '-l',
@@ -58,14 +58,14 @@ class FdiskParser:
         image2         15 10254   10240   5M  b W95 FAT32
 
         """
-        in_partitions = False
+        in_regions = False
         for line in output.splitlines():
-            if in_partitions:
+            if in_regions:
                 parts = re.split(r"\s+", line)
                 if not parts[1] == "*":
                     parts.insert(1, "")
                 _, boot, start, end, sectors, _, tyoe_id, *_ = parts
-                self.partitions.append(FdiskPartition(
+                self.regions.append(FdiskRegion(
                     int(start),
                     int(end),
                     int(sectors),
@@ -77,7 +77,7 @@ class FdiskParser:
                 if line.startswith("Disk identifier:"):
                     self.diskid = int(line.split(":")[1], 16)
                 elif line.startswith("Device"):
-                    in_partitions = True
+                    in_regions = True
 
 
 
@@ -120,22 +120,22 @@ class TestMBR:
         image = tmp_path / "image"
         obj = MBR()
 
-        empty = EmptyPartition()
-        empty.name = "empty partition"
+        empty = EmptyRegion()
+        empty.name = "empty region"
         empty.start = SizeType(512 * 12)
         empty.size = SizeType(512)
 
         ext4_raw = tmp_path / "ext4"
         ext4_raw.write_bytes(b"1" * 512 * 2)
-        ext4 = PartitionPartition()
+        ext4 = PartitionRegion()
         ext4.fstype = "ext4"
-        ext4.name = "ext4 partition"
+        ext4.name = "ext4 region"
         ext4.content = RawContent()
         ext4.content.file = ext4_raw
 
-        fat32 = PartitionPartition()
+        fat32 = PartitionRegion()
         fat32.fstype = "fat32"
-        fat32.name = "fat32 partition"
+        fat32.name = "fat32 region"
         fat32.content = Fat32Content()
         fat32.content.content = FilesContent()
         fat32.size = SizeType.parse("5MB")
@@ -154,8 +154,8 @@ class TestMBR:
         fdisk = FdiskParser(image)
 
         assert fdisk.is_valid
-        assert len(fdisk.partitions) == 2
-        assert fdisk.partitions[0].start_sector == 13
-        assert fdisk.partitions[0].type_id == FdiskParser.TYPE_LINUX_NATIVE
-        assert fdisk.partitions[1].start_sector == 15
-        assert fdisk.partitions[1].type_id == FdiskParser.TYPE_FAT32_LBA
+        assert len(fdisk.regions) == 2
+        assert fdisk.regions[0].start_sector == 13
+        assert fdisk.regions[0].type_id == FdiskParser.TYPE_LINUX_NATIVE
+        assert fdisk.regions[1].start_sector == 15
+        assert fdisk.regions[1].type_id == FdiskParser.TYPE_FAT32_LBA
