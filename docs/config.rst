@@ -18,7 +18,7 @@ The example above would create a master boot record partition table, with one re
 This fat32 partition is created by embdgen and contains a single file (fitimage).
 Three additional partitions are created, that are not recorded in the partition table.
 This setup is an example for the bootloader requirements at the NXP's S32 series of SoCs:
- 
+
  - uboot part 1 and 2: They write NXP specific code (i.e. the image vector table with it's payload uboot and atf) around
    the partition table (between byte 256 and 512)
  - uboot.env: This creates an unused range (type: empty) between 0x1e0000 and 0x1e2000, which is the default area, where
@@ -28,7 +28,7 @@ This setup is an example for the bootloader requirements at the NXP's S32 series
 To generate the image, the embdgen can be executed from the directory where the config file is stored and the files directory with the referenced files exist.
 Assuming the yaml config is save as config.yml::
 
-    $ embdgen config.yml 
+    $ embdgen config.yml
     Preparing...
 
     The final layout:
@@ -44,8 +44,8 @@ Assuming the yaml config is save as config.yml::
 
     Writing image to image.raw
 
-The tool prints out the final layout of all partitions.
-There is now one more partition than defined in the config file ("MBR Header").
+The tool prints out the final layout of all Regions.
+There is now one more region than defined in the config file ("MBR Header").
 This is inserted by the MBR label, to reserve the area where the partition table is written to.
 For the boot partition no start address was defined in the config file, so this address is calculated automatically to the next free offset in the image.
 
@@ -60,10 +60,10 @@ Label Types
 .. embdgen-config:: embdgen.core.label.Factory
 
 
-Partition Types
+Region Types
 ---------------
 
-.. embdgen-config:: embdgen.core.partition.Factory
+.. embdgen-config:: embdgen.core.region.Factory
 
 
 Content Types

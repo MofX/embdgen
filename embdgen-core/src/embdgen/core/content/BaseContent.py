@@ -3,7 +3,7 @@ import abc
 from ..utils.SizeType import SizeType
 
 class BaseContent(abc.ABC):
-    """Base class for content (i.e. partition content)
+    """Base class for content (i.e. region content)
     """
 
     size: SizeType

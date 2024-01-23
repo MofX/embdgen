@@ -6,6 +6,6 @@ Core
 
     utils/index
     label/index
-    partition/index
+    region/index
     content/index
 

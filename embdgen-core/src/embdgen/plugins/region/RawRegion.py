@@ -1,21 +1,21 @@
 from io import BufferedIOBase
 
 from embdgen.core.utils.class_factory import Config
-from embdgen.core.partition.BaseContentPartition import BaseContentPartition
+from embdgen.core.region.BaseContentRegion import BaseContentRegion
 from embdgen.core.content import BinaryContent
 
 
 @Config('content')
-class RawPartition(BaseContentPartition):
-    """Raw partition
-    
+class RawRegion(BaseContentRegion):
+    """Raw region
+
     Writes some BinaryContent directly to the image
     without any partition table entry.
     """
     PART_TYPE = 'raw'
 
     content: BinaryContent
-    """Content of this partition"""
+    """Content of this region"""
 
     def __init__(self) -> None:
         super().__init__()

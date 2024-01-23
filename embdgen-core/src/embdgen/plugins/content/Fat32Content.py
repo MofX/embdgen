@@ -17,12 +17,12 @@ class Fat32Content(BinaryContent):
     CONTENT_TYPE = "fat32"
 
     content: FilesContent
-    """Content of this partition"""
+    """Content of this region"""
 
     def prepare(self) -> None:
         super().prepare()
         if self.size.is_undefined:
-            raise Exception("Fat32 partitions require a fixed size at the moment")
+            raise Exception("Fat32 regions require a fixed size at the moment")
 
 
     def _prepare_result(self):

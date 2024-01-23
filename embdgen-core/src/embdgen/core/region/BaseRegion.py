@@ -7,22 +7,22 @@ from ..utils.class_factory import Config
 @Config('name')
 @Config('start', optional=True)
 @Config('size', optional=True)
-class BasePartition(abc.ABC):
-    """Base class for partitions
+class BaseRegion(abc.ABC):
+    """Base class for regions
 
-    A partition is not necessarily part of the partition table.
+    A region is not necessarily part of the partition table.
     It is just a part of the final image with a start and a size.
     """
 
-    name: str #: Name of the partition
+    name: str #: Name of the region
     start: SizeType
-    """Start of the partition
+    """Start of the region
 
     This can either be specified or should be calculated automatically
     by the label implementation.
     """
     size: SizeType
-    """Size of the partition
+    """Size of the region
 
     This can either be specified or should be calculated automatically
     by the label or the content
@@ -46,4 +46,4 @@ class BasePartition(abc.ABC):
 
     @abc.abstractmethod
     def write(self, out_file: io.BufferedIOBase):
-        """Writes this partition to the current position in ``out_file``"""
+        """Writes this region to the current position in ``out_file``"""
