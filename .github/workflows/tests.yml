@@ -1,0 +1,52 @@
+name: tests
+
+on:
+  push:
+    branches: [ "test" ]
+  pull_request:
+    branches: [ "test" ]
+  workflow_dispatch:
+
+
+jobs:
+  run-tests-and-lint:
+    runs-on: ubuntu-latest
+    strategy:
+      matrix:
+        python-version: ["3.9", "3.10", "3.11", "3.12"]
+
+    steps:
+      - uses: actions/checkout@v4
+      - name: Set up Python ${{ matrix.python-version }}
+        uses: actions/setup-python@v4
+        with:
+          python-version: ${{ matrix.python-version }}
+          cache: 'pip'
+
+      - name: Checkout repo
+        uses: actions/checkout@v3
+
+      - name: Install dependencies
+        run: |
+          sudo apt-get update
+          sudo apt-get install mtools e2fsprogs cryptsetup-bin dosfstools fdisk libparted-dev
+
+      - name: Install pip dependencies
+        run: python -m pip install --upgrade pip setuptools wheel
+
+      - name: Install python dependencies
+        run: |
+          python -m pip install --upgrade pip
+          pip install -r dev-requirements.txt
+
+      - name: Install packages
+        run: |
+          pip install -e embdgen-core
+          pip install -e embdgen-cominit
+          pip install -e embdgen-config-yaml
+
+      - name: Run tests
+        run: scripts/run_tests.sh
+
+      - name: Run lint
+        run: scripts/run_lint.sh
