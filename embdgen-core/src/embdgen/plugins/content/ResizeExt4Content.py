@@ -50,6 +50,12 @@ class ResizeExt4Content(BinaryContent):
             self.content.write(f)
 
         subprocess.run([
+            "e2fsck",
+            "-fp",
+            str(self.result_file)
+        ], check=True)
+
+        subprocess.run([
             "resize2fs",
             str(self.result_file),
             f"{self.size.sectors}s"
