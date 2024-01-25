@@ -1,3 +1,5 @@
+# SPDX-License-Identifier: GPL-3.0-only
+
 from embdgen.core.region.BaseRegion import BaseRegion
 
 class EmptyRegion(BaseRegion):

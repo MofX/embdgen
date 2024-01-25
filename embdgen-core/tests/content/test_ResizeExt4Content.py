@@ -1,3 +1,5 @@
+# SPDX-License-Identifier: GPL-3.0-only
+
 from pathlib import Path
 import subprocess
 import re
@@ -7,6 +9,7 @@ from embdgen.plugins.content.ResizeExt4Content import ResizeExt4Content
 from embdgen.plugins.content.RawContent import RawContent
 from embdgen.core.utils.image import create_empty_image, get_temp_path
 from embdgen.core.utils.SizeType import SizeType
+
 
 def get_ext4_size(filename: Path) -> int:
     res = subprocess.run([

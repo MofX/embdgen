@@ -1,3 +1,5 @@
+# SPDX-License-Identifier: GPL-3.0-only
+
 from embdgen.core.content import BaseContent, Factory
 
 from .ObjectBase import ObjectBase

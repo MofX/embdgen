@@ -1,3 +1,5 @@
+# SPDX-License-Identifier: GPL-3.0-only
+
 import sys
 from typing import Optional, Sequence
 from pathlib import Path
@@ -7,7 +9,7 @@ from argparse import ArgumentParser
 from ..config.Factory import Factory
 from ..utils.image import get_temp_path
 
-@dataclass(init=False, slots=True)
+@dataclass(init=False)
 class Arguments:
     format: Optional[str]
     output: Path

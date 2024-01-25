@@ -1,6 +1,11 @@
-# Requirements
+# EMBedded Disk GENerator - embdgen
 
-Emdgen needs the following packages on ubuntu/debian:
+The embedded disk generator is a tool, that can be used, to create disk images for embedded targets.
+See docs for more details.
+
+## Requirements
+
+Embdgen needs the following packages on ubuntu/debian:
 
 ## Required
 
@@ -13,20 +18,20 @@ Emdgen needs the following packages on ubuntu/debian:
 apt install python3 python3-pip python3-venv libparted-dev
 ```
 
-## Optional (required for test execution during development)
+### Optional (required for test execution during development)
  - `mtools`:         For copying files to fat32 partitions
  - `e2fsprogs`:      For everything ext(1,2,3,4) related
  - `cryptsetup-bin`: For veritysetup, when not using the internal hash calculation algorithm
  - `dosfstools`:     For creating fat32 partitions
 
-## For tests only
+### For tests only
  - `fdisk`:          For verifying the partition table
 
 ```
 apt install mtools e2fsprogs cryptsetup-bin
 ```
 
-# Development
+## Development
 It is highly recommended, to develop in a virtual environment using python 3.10:
 
 ```
@@ -69,7 +74,7 @@ PKG_CONFIG_PATH=$PWD/../lib/pkgconfig/ pip install pyparted
 ```
 
 
-## Running pylint
+### Running pylint
 To run pylint for all packages, just run `scripts/run_lint.sh`
 
 To run pylint for a single package, switch to the directory and run `pylint src`:
@@ -84,7 +89,7 @@ If you run pylint from the root of the repository, the correct configuration is 
 The result is printed on the command line
 
 
-## Running tests
+### Running tests
 To run all tests, just run `scripts/run_tests.sh`.
 
 To run the tests for a specific package or even a specific test in the package, switch to the directory and run `pytest`.
@@ -99,7 +104,7 @@ pytest tests/utils/test_SizeType.py
 This will print the results to the console and also create a coverage report in `<package>/htmlcov`.
 
 
-## Building the docs
+### Building the docs
 ```
 cd docs
 make html

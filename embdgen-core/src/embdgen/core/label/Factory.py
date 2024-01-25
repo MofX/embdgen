@@ -1,3 +1,5 @@
+# SPDX-License-Identifier: GPL-3.0-only
+
 from embdgen.plugins import label
 
 from ..utils.class_factory import FactoryBase

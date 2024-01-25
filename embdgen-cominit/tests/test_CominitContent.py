@@ -1,3 +1,5 @@
+# SPDX-License-Identifier: GPL-3.0-only
+
 from pathlib import Path
 import pytest
 from cryptography.hazmat.primitives.asymmetric import rsa, padding

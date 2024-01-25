@@ -1,3 +1,5 @@
+# SPDX-License-Identifier: GPL-3.0-only
+
 import strictyaml as y
 
 from embdgen.core.utils.class_factory import FactoryBase

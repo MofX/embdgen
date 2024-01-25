@@ -1,3 +1,5 @@
+# SPDX-License-Identifier: GPL-3.0-only
+
 import abc
 from typing import Any, List, Type, Dict, get_origin, Generic, TypeVar, get_type_hints
 from inspect import isclass, signature
