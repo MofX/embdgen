@@ -1,0 +1,10 @@
+Source: python-embdgen-config-yaml
+Maintainer: AOX Technologies GmbH <info@aox.de>
+Build-Depends: debhelper (>= 11), dh-python, python3-all, pybuild-plugin-pyproject, python3-hatchling, python3-embdgen-core
+Standards-Version: 4.5.0
+X-Python3-Version: >= 3.10
+
+Package: python3-embdgen-config-yaml
+Architecture: all
+Depends: ${python3:Depends}
+Description: EMBedded Disk GENerator yaml config loader

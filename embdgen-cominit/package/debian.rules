@@ -1,0 +1,11 @@
+#! /usr/bin/make -f
+
+#export DH_VERBOSE = 1
+#export PYBUILD_VERBOSE = 1
+export PYBUILD_NAME = emdbgen-core
+export PYBUILD_SYSTEM = pyproject
+# pybuild runs the tests in the build directory and includes .coverage and htmlcov into the deb package
+export PYBUILD_AFTER_TEST = echo {build_dir}/.coverage >> {home_dir}/testfiles_to_rm_before_install; echo {build_dir}/htmlcov >> {home_dir}/testfiles_to_rm_before_install
+
+%:
+	dh $@ --with python3 --buildsystem=pybuild
