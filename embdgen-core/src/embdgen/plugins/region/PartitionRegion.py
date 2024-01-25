@@ -1,3 +1,5 @@
+# SPDX-License-Identifier: GPL-3.0-only
+
 from io import BufferedIOBase
 
 from embdgen.core.utils.class_factory import Config

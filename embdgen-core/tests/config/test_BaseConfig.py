@@ -1,3 +1,5 @@
+# SPDX-License-Identifier: GPL-3.0-only
+
 from pathlib import Path
 from embdgen.core.config.BaseConfig import BaseConfig
 from embdgen.core.label.BaseLabel import BaseLabel

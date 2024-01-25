@@ -1,3 +1,5 @@
+# SPDX-License-Identifier: GPL-3.0-only
+
 from typing import Optional
 import pytest
 from embdgen.core.utils.SizeType import SizeType, BYTES_PER_SECTOR

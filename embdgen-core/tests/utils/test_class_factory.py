@@ -1,3 +1,5 @@
+# SPDX-License-Identifier: GPL-3.0-only
+
 import pytest
 from typing import List
 
@@ -9,6 +11,7 @@ from .plugintest.simple.TestPlugins import TestPlugin3 as SimpleTestPlugin3
 from .plugintest import classkey
 from .plugintest.classkey import BaseTestPlugin as ClassKeyBaseTestPlugin
 from .plugintest.classkey.TestPlugins import *
+
 
 @Config('foo')
 class Base:

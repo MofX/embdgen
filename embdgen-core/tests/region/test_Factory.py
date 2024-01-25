@@ -1,4 +1,7 @@
+# SPDX-License-Identifier: GPL-3.0-only
+
 from  embdgen.core.region import Factory
+
 
 def test_factory():
     f_types = Factory().types()

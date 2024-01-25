@@ -1,3 +1,5 @@
+# SPDX-License-Identifier: GPL-3.0-only
+
 from typing import List
 
 from embdgen.core.region import BaseRegion, Factory

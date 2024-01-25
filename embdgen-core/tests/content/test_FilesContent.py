@@ -1,5 +1,6 @@
-from embdgen.plugins.content.FilesContent import FilesContent
+# SPDX-License-Identifier: GPL-3.0-only
 
+from embdgen.plugins.content.FilesContent import FilesContent
 
 class TestFilesContent():
     def test_init(self):
