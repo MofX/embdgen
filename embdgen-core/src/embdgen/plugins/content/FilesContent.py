@@ -14,12 +14,29 @@ class FilesContent(BaseContent):
     """
     CONTENT_TYPE = "files"
 
-    files: List[Path]
-    """The list of files"""
+    _files: List[Path]
+    _configured_files: List[Path] = None
+
 
     def __init__(self):
         super().__init__()
         self.files = []
 
+    @property
+    def files(self) -> List[Path]:
+        """The list of files
+        Wildcards are allowed and expanded using python glob module.
+        Note that you probably only want one glob for a directory like `dir/*`.
+        This will include all files including the directory structure under and excluding `dir`.
+        """
+        return self._files
+
+    @files.setter
+    def files(self, files: List[Path]) -> None:
+        self._configured_files = files
+        self._files = []
+        for p in files:
+            self._files += p.parent.glob(p.name)
+
     def __repr__(self) -> str:
-        return f"{self.__class__.__name__}({', '.join(map(str, self.files))})"
+        return f"{self.__class__.__name__}({', '.join(map(str, self._configured_files))})"
