@@ -5,12 +5,12 @@ import os
 from pathlib import Path
 from tempfile import TemporaryDirectory
 import shutil
-import subprocess
 
 from embdgen.core.utils.class_factory import Config
 from embdgen.core.content.BinaryContent import BinaryContent
 from embdgen.core.content.FilesContentProvider import FilesContentProvider
-from embdgen.core.utils.image import create_empty_image, copy_sparse, get_temp_path
+from embdgen.core.utils.image import create_empty_image, copy_sparse, get_temp_file, get_temp_path
+from embdgen.core.utils.FakeRoot import FakeRoot
 
 
 @Config("content")
@@ -23,10 +23,9 @@ class Ext4Content(BinaryContent):
     """Files, that are added to the filesystem"""
 
     def prepare(self) -> None:
-        super().prepare()
-        self.content.prepare()
         if self.size.is_undefined:
             raise Exception("Ext4 content requires a fixed size at the moment")
+        self.content.prepare()
 
     def _prepare_result(self):
         create_empty_image(self.result_file, self.size.bytes)
@@ -39,7 +38,7 @@ class Ext4Content(BinaryContent):
                 else:
                     os.link(str(file), str(Path(tmp_dir) / file.name))
 
-            subprocess.run([
+            FakeRoot(get_temp_file(), self.content.fakeroot).run([
                 "mkfs.ext4",
                 "-d", diro,
                 self.result_file

@@ -2,7 +2,6 @@
 
 from pathlib import Path
 from typing import List
-import subprocess
 from tempfile import TemporaryDirectory
 
 from embdgen.core.utils.class_factory import Config
@@ -29,9 +28,9 @@ class ArchiveContent(FilesContentProvider):
         self._tmpDir = TemporaryDirectory(dir=get_temp_path()) #pylint: disable=consider-using-with
         tmpDir = Path(self._tmpDir.name)
 
-        subprocess.run([
+        self._fakeroot.run([
             "tar",
-            "-xf", self.archive,
+            "-xpf", self.archive,
             "-C", tmpDir
         ], check=True)
 
