@@ -40,13 +40,12 @@ class Fat32Content(BinaryContent):
         )
 
         for file in self.content.files:
-            subprocess.run(
+            self.content.fakeroot.run(
                 [
                     "mcopy",
                     "-i", self.result_file,
                     file, "::"
                 ],
-                check=True,
                 stdout=subprocess.PIPE,
                 stderr=subprocess.STDOUT
             )
