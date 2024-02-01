@@ -9,7 +9,7 @@ import subprocess
 
 from embdgen.core.utils.class_factory import Config
 from embdgen.core.content.BinaryContent import BinaryContent
-from embdgen.plugins.content.FilesContent import FilesContent
+from embdgen.core.content.FilesContentProvider import FilesContentProvider
 from embdgen.core.utils.image import create_empty_image, copy_sparse, get_temp_path
 
 
@@ -19,7 +19,7 @@ class Ext4Content(BinaryContent):
     """
     CONTENT_TYPE = "ext4"
 
-    content: FilesContent = None
+    content: FilesContentProvider = None
     """Files, that are added to the filesystem"""
 
     def prepare(self) -> None:

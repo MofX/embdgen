@@ -4,10 +4,10 @@ from typing import List
 from pathlib import Path
 
 from embdgen.core.utils.class_factory import Config
-from embdgen.core.content.BaseContent import BaseContent
+from embdgen.core.content.FilesContentProvider import FilesContentProvider
 
 @Config("files")
-class FilesContent(BaseContent):
+class FilesContent(FilesContentProvider):
     """A list of files
     
     It is up to the including content module, to decide what happens with the files.
