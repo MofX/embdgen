@@ -43,11 +43,13 @@ def try_read_doc(cls: Type, name: str) -> str:
     analyzer.analyze()
     return "\n".join(analyzer.find_attr_docs().get((cls.__name__, name), [])).strip()
 
+CT = TypeVar("CT")
+
 def Config(name: str, doc="", optional=False):
     """
     Metadata decorator for classes for the BaseFactory
     """
-    def decorate(cls: Type):
+    def decorate(cls: Type[CT]) -> Type[CT]:
         local_doc = doc
         name_prop = getattr(cls, name, None)
         if name_prop is not None and isinstance(name_prop, property):
