@@ -2,9 +2,9 @@
 
 from typing import List
 import re
-from pathlib import Path
 import subprocess
 from dataclasses import dataclass
+import pytest
 
 from embdgen.core.utils.image import get_temp_path
 from embdgen.core.utils.SizeType import SizeType
@@ -12,7 +12,6 @@ from embdgen.core.utils.SizeType import SizeType
 from embdgen.plugins.label.GPT import GPT
 from embdgen.plugins.region.EmptyRegion import EmptyRegion
 from embdgen.plugins.region.PartitionRegion import PartitionRegion
-from embdgen.plugins.region.RawRegion import RawRegion
 
 from embdgen.plugins.content.RawContent import RawContent
 from embdgen.plugins.content.FilesContent import FilesContent
@@ -117,3 +116,17 @@ class TestGPT:
         assert len(fdisk.regions) == 2
         assert fdisk.regions[0].start_sector == 35
         assert fdisk.regions[1].start_sector == 37
+
+
+    def test_overlap_primary(self):
+        obj = GPT()
+
+        empty = EmptyRegion()
+        empty.name = "empty region"
+        empty.start = SizeType(512 * 33)
+        empty.size = SizeType(512)
+
+        obj.parts = [empty]
+
+        with pytest.raises(Exception, match="Part 'empty region' overlapps with 'GPT Header'"):
+            obj.prepare()

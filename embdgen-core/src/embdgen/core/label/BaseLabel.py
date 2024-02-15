@@ -26,7 +26,7 @@ class BaseLabel(abc.ABC):
     def __init__(self):
         self.parts = []
 
-    def _prepare(self):
+    def prepare(self):
         for part in self.parts:
             part.prepare()
         self.parts.sort(key=lambda x: x.start)
@@ -36,14 +36,23 @@ class BaseLabel(abc.ABC):
                 part.start = cur_offset
             cur_offset = part.start + part.size
 
+        self._validate_parts()
+
+    def _validate_parts(self):
+        self.parts.sort(key=lambda x: x.start)
+        cur_offset = SizeType(0)
+        last_part = None
+        for part in self.parts:
+            if part.start < cur_offset:
+                raise Exception(f"Part '{part.name}' overlapps with '{last_part.name}'")
+            last_part = part
+            cur_offset += part.size
+
     def _create_partition_table(self, filename: Path, ptType: str):
         device = parted.getDevice(filename.as_posix())
         disk = parted.freshDisk(device, ptType)
 
         for part in self.parts:
-            # This check is added here to ensure partition tables are not overwritten
-            self.check_partition_table_collision(part)
-
             if not part.is_partition:
                 continue
             geometry = parted.Geometry(device, start=part.start.sectors, length=part.size.sectors)
@@ -60,8 +69,8 @@ class BaseLabel(abc.ABC):
                 partition.setFlag(parted.PARTITION_BOOT)
         disk.commit()
 
-    def _create(self, filename: Path):
-        size = self.calculate_image_size()
+    def create(self, filename: Path):
+        size = self.parts[-1].start + self.parts[-1].size
         create_empty_image(filename, size.bytes)
 
         self.create_partition_table(filename)
@@ -69,22 +78,6 @@ class BaseLabel(abc.ABC):
         with filename.open("rb+") as f:
             for part in self.parts:
                 part.write(f)
-
-    @abc.abstractmethod
-    def prepare(self):
-        pass
-
-    @abc.abstractmethod
-    def create(self, filename: str):
-        pass
-
-    @abc.abstractmethod
-    def check_partition_table_collision(self, part: BaseRegion):
-        pass
-
-    @abc.abstractmethod
-    def calculate_image_size(self):
-        pass
 
     @abc.abstractmethod
     def create_partition_table(self, filename: Path):

@@ -50,29 +50,10 @@ class MBR(BaseLabel):
     def prepare(self):
         if self.mbr_header not in self.parts:
             self.parts.append(self.mbr_header)
-        super()._prepare()
-
-    def check_partition_table_collision(self, part: BaseRegion):
-        if self.LABEL_TYPE == "mbr":
-            if part.name == "MBR Header":
-                return
-            part_end = part.start + part.size
-            if part.start <= self.mbr_header.start:
-                if part_end > self.mbr_header.start:
-                    raise Exception (f"The region starting at {part.start} overwrites MBR region")
-            elif part.start < self.mbr_header.start + self.mbr_header.size:
-                raise Exception (f"The region starting at {part.start} overwrites MBR region")
-
-
-    def calculate_image_size(self) -> SizeType:
-        return self.parts[-1].start + self.parts[-1].size
-
+        super().prepare()
 
     def create_partition_table(self, filename: Path):
         self._create_partition_table(filename, "msdos")
-
-    def create(self, filename: Path):
-        super()._create(filename)
 
     def __repr__(self) -> str:
         return "MBR:\n  " + "\n  ".join(map(repr, self.parts))
