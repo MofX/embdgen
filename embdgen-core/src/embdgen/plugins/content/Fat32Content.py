@@ -5,7 +5,7 @@ import subprocess
 
 from embdgen.core.utils.class_factory import Config
 from embdgen.core.content.BinaryContent import BinaryContent
-from embdgen.plugins.content.FilesContent import FilesContent
+from embdgen.core.content.FilesContentProvider import FilesContentProvider
 from embdgen.core.utils.image import create_empty_image, copy_sparse
 
 @Config("content")
@@ -18,7 +18,7 @@ class Fat32Content(BinaryContent):
     """
     CONTENT_TYPE = "fat32"
 
-    content: FilesContent
+    content: FilesContentProvider
     """Content of this region"""
 
     def prepare(self) -> None:
@@ -40,13 +40,12 @@ class Fat32Content(BinaryContent):
         )
 
         for file in self.content.files:
-            subprocess.run(
+            self.content.fakeroot.run(
                 [
                     "mcopy",
                     "-i", self.result_file,
                     file, "::"
                 ],
-                check=True,
                 stdout=subprocess.PIPE,
                 stderr=subprocess.STDOUT
             )

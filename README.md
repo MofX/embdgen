@@ -23,12 +23,13 @@ apt install python3 python3-pip python3-venv libparted-dev
  - `e2fsprogs`:      For everything ext(1,2,3,4) related
  - `cryptsetup-bin`: For veritysetup, when not using the internal hash calculation algorithm
  - `dosfstools`:     For creating fat32 partitions
+ - `fakeroot`:       For creating file privileged attributes during archive extraction and copying them to partitions
 
 ### For tests only
  - `fdisk`:          For verifying the partition table
 
 ```
-apt install mtools e2fsprogs cryptsetup-bin
+apt install mtools e2fsprogs cryptsetup-bin fakeroot
 ```
 
 ## Development

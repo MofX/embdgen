@@ -7,3 +7,4 @@ that is written into the image.
 .. automodule:: embdgen.core.content.Factory
 .. automodule:: embdgen.core.content.BaseContent
 .. automodule:: embdgen.core.content.BinaryContent
+.. automodule:: embdgen.core.content.FilesContentProvider

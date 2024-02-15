@@ -6,3 +6,4 @@ embdgen.core.utils
 
     SizeType
     image
+    FakeRoot
