@@ -19,10 +19,6 @@ class RawRegion(BaseContentRegion):
     content: BinaryContent
     """Content of this region"""
 
-    def __init__(self) -> None:
-        super().__init__()
-        self.is_partition = False
-
     def write(self, out_file: BufferedIOBase):
         out_file.seek(self.start.bytes)
         self.content.write(out_file)

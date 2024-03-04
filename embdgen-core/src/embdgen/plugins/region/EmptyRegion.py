@@ -10,9 +10,5 @@ class EmptyRegion(BaseRegion):
     """
     PART_TYPE = 'empty'
 
-    def __init__(self) -> None:
-        super().__init__()
-        self.is_partition = False
-
     def write(self, out_file):
         pass # Nothing to do for empty region

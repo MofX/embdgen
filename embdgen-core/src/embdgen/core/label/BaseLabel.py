@@ -5,11 +5,12 @@ from typing import List
 from pathlib import Path
 import parted
 
+from embdgen.plugins.region.PartitionRegion import PartitionRegion
+
 from embdgen.core.utils.SizeType import SizeType
 from embdgen.core.utils.image import create_empty_image
 from ..utils.class_factory import Config
 from ..region import BaseRegion
-
 
 
 @Config('parts')
@@ -53,7 +54,7 @@ class BaseLabel(abc.ABC):
         disk = parted.freshDisk(device, ptType)
 
         for part in self.parts:
-            if not part.is_partition:
+            if not isinstance(part, PartitionRegion):
                 continue
             geometry = parted.Geometry(device, start=part.start.sectors, length=part.size.sectors)
             partition = parted.Partition(

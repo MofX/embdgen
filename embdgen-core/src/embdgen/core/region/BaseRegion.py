@@ -29,8 +29,6 @@ class BaseRegion(abc.ABC):
     This can either be specified or should be calculated automatically
     by the label or the content
     """
-    is_partition: bool = True
-    """Set to false to exclude this from the partition table"""
 
     def __init__(self) -> None:
         self.start = SizeType()
