@@ -11,8 +11,8 @@ import sys
 # https://www.sphinx-doc.org/en/master/usage/configuration.html#project-information
 
 project = 'embdgen'
-copyright = '2023, AOX'
-author = 'AOX'
+copyright = '2024, AOX Technologies GmbH, Elektrobit Automotive GmbH'
+author = 'AOX Technologies GmbH, Elektrobit Automotive GmbH'
 
 # -- General configuration ---------------------------------------------------
 # https://www.sphinx-doc.org/en/master/usage/configuration.html#general-configuration
