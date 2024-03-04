@@ -9,10 +9,10 @@ from embdgen.core.content import BinaryContent
 @Config('content')
 @Config('fstype')
 class PartitionRegion(BaseContentRegion):
-    """Partition region
+    """
+    Partition region
 
-    Currently this can only be generated from a BinaryContent,
-    that already contains an ext4 filesystem.
+    This creates an entry in the partition table
     """
     PART_TYPE = 'partition'
 
@@ -20,7 +20,7 @@ class PartitionRegion(BaseContentRegion):
     """Content of this Region"""
 
     fstype: str
-    """FS type of this region"""
+    """Filesystem type of this region (e.g. ext4, fat32)"""
 
     def write(self, out_file: BufferedIOBase):
         out_file.seek(self.start.bytes)

@@ -10,7 +10,8 @@ type: mbr
 
 parts:
   - name: root
-    type: ext4
+    type: partition
+    fstype: ext4
     content:
       type:       cominit
       key:        files/private-key.pem

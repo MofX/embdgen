@@ -31,9 +31,19 @@ parts:
     size:  0x2000 B
 
   - name: boot
-    type: fat32
+    type: partition
+    fstype: fat32
     content:
-      type: files
-      files:
-        - files/fitimage
+      type: fat32
+      content:
+        type: files
+        files:
+          - files/fitimage
     size: 100 MB
+
+  - name: root
+    type: partition
+    fstype: ext4
+    content:
+      type: raw
+      file: files/root.raw

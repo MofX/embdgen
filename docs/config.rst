@@ -14,10 +14,11 @@ Every element in the tree is YAML sequence, that contains a scalar ``type``, tha
     :caption: simple example
     :lines: 8-
 
-The example above would create a master boot record partition table, with one real partition (boot).
-This fat32 partition is created by embdgen and contains a single file (fitimage).
+The example above would create a master boot record partition table, with two partition entries (boot and root).
+This fat32 boot partition is created by embdgen and contains a single file (fitimage).
+The root partition is an ext4 partition, that is filled with a partition image, that already contains an ext4 filesystem.
 Three additional partitions are created, that are not recorded in the partition table.
-This setup is an example for the bootloader requirements at the NXP's S32 series of SoCs:
+This setup is an example for the bootloader requirements the NXP's S32 series of SoCs:
 
  - uboot part 1 and 2: They write NXP specific code (i.e. the image vector table with it's payload uboot and atf) around
    the partition table (between byte 256 and 512)
@@ -33,21 +34,23 @@ Assuming the yaml config is save as config.yml::
 
     The final layout:
     MBR:
-    0x00000000 - 0x00000100 Part u-boot part 1
+      0x00000000 - 0x00000100 Part u-boot part 1
         RawContent(files/fip.s32@0x00000000)
-    0x000001b8 - 0x00000200 Part MBR Header
-    0x00000200 - 0x000fead0 Part u-boot part 2
+      0x000001b8 - 0x00000200 Part MBR Header
+      0x00000200 - 0x000fead0 Part u-boot part 2
         RawContent(files/fip.s32@0x00000200)
-    0x001e0000 - 0x001e2000 Part uboot.env
-    0x001e2000 - 0x065e2000 Part boot
-        FilesContent(files/fitimage)
+      0x001e0000 - 0x001e2000 Part uboot.env
+      0x001e2000 - 0x065e2000 Part boot
+        Fat32Content()
+      0x065e2000 - 0x1c0e3000 Part root
+        RawContent(files/root.raw@0x00000000)
 
     Writing image to image.raw
 
 The tool prints out the final layout of all Regions.
 There is now one more region than defined in the config file ("MBR Header").
 This is inserted by the MBR label, to reserve the area where the partition table is written to.
-For the boot partition no start address was defined in the config file, so this address is calculated automatically to the next free offset in the image.
+For the boot and root partition no start addresses were defined in the config file, so these addresses are calculated automatically to the next free offset in the image.
 
 Reference
 =========
