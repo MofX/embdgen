@@ -1,7 +1,7 @@
 # SPDX-License-Identifier: GPL-3.0-only
 
 import abc
-from typing import Any, List, Type, Dict, get_origin, Generic, TypeVar, get_type_hints
+from typing import Any, List, Type, Dict, Optional, get_origin, Generic, TypeVar, get_type_hints
 from inspect import isclass, signature
 from pkgutil import iter_modules
 from importlib import import_module
@@ -16,16 +16,16 @@ class Meta():
     _META_KEY = "__embdgen_meta__"
 
     name: str
-    typecls: object
+    typecls: Type
     doc: str = ""
     optional: bool = False
 
     @classmethod
-    def get(cls, obj: Type) -> Dict[str, 'Meta']:
+    def get(cls, obj: object) -> Dict[str, 'Meta']:
         return getattr(obj, cls._META_KEY, {})
 
     @classmethod
-    def set(cls, obj: Type, value: 'Meta'):
+    def set(cls, obj: Type, value: 'Meta') -> None:
         name = value.name
         attr = cls.get(obj)
         if cls._META_KEY not in obj.__dict__: # Test if the attribute is defined on the instance, not the parents
@@ -84,11 +84,11 @@ class FactoryBase(abc.ABC, Generic[T]):
 
     @classmethod
     @abc.abstractmethod
-    def load(cls):
+    def load(cls) -> dict:
         pass
 
     @classmethod
-    def load_plugins(cls, root_module: ModuleType, baseclass: Type[T], key: str):
+    def load_plugins(cls, root_module: ModuleType, baseclass: Type[T], key: str) -> Dict[Any, Type[T]]:
         retval = {}
         for (_, module_name, _) in iter_modules(list(root_module.__path__)):
             module = import_module(f"{root_module.__name__}.{module_name}")
@@ -105,7 +105,7 @@ class FactoryBase(abc.ABC, Generic[T]):
         return cls.__class_map
 
     @classmethod
-    def by_type(cls, type_any: Any) -> Type[T]:
+    def by_type(cls, type_any: Any) -> Optional[Type[T]]:
         impl_class = cls.class_map().get(type_any, None)
         if impl_class or not cls.ALLOW_SUBCLASS:
             return impl_class
@@ -119,7 +119,7 @@ class FactoryBase(abc.ABC, Generic[T]):
 
 
     @classmethod
-    def types(cls, parent_class: Type = None) -> List[Any]:
+    def types(cls, parent_class: Optional[Type] = None) -> List[Any]:
         if not parent_class:
             return list(cls.class_map().keys())
 
